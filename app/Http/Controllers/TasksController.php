@@ -44,7 +44,14 @@ public function index()
      */
     public function store(Request $request)
     {
+        
+        $this->validate($request, [
+            'status' => 'required|max:191',   // 追加
+            'content' => 'required|max:191',
+        ]);
+        
         $tasklist = new tasks;
+        $tasklist->status = $request->status;    // 追加
         $tasklist->content = $request->content;
         $tasklist->save();
         
@@ -90,7 +97,13 @@ public function index()
      */
     public function update(Request $request, $id)
     {
+        $this->validate($request, [
+            'status' => 'required|max:191',   // 追加
+            'content' => 'required|max:191',
+        ]);
+        
         $tasklist = Tasks::find($id);
+        $tasklist->status = $request->status;    // 追加
         $tasklist->content = $request->content;
         $tasklist->update();
         
