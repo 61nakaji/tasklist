@@ -5,7 +5,7 @@
 <h1>タスク新規作成ページ</h1>
  
      <div class="row">
-        <div class="col-xs-6">
+        <div class="col-xs-12, col-sm-8", "col-md-8", "col-lg-6">
             {!! Form::model($tasklist, ['route' => 'tasks.store']) !!}
             
                 <div class="form-group">
