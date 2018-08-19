@@ -38,7 +38,7 @@ public function index()
         $tasklist = new tasks;
         
         return view('tasks.create',[
-          'tasklist' => $tasklist,
+          'tasklist' => $tasks,
             ]);
     }
 
@@ -76,7 +76,7 @@ public function index()
         
         if (\Auth::id() === $tasklist->user_id) {
             return view('tasks.show', [
-                'tasks' => $tasklist
+                'tasks' => $tasks
                 ]);
         } else {
         return redirect('/');
@@ -96,7 +96,7 @@ public function index()
         
         if (\Auth::id() === $tasklist->user_id) {
         return view('tasks.edit',[
-            'tasklist' => $tasklist
+            'tasklist' => $tasks
             ]);
         }else{
         return redirect('/');
