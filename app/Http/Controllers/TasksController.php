@@ -111,12 +111,14 @@ public function index()
      */
     public function update(Request $request, $id)
     {
+        $tasklist = Tasks::find($id);
+
         $this->validate($request, [
             'status' => 'required|max:191',   // 追加
             'content' => 'required|max:191',
         ]);
         if (\Auth::id() === $tasklist->user_id) {
-            $tasklist = Tasks::find($id);
+
             $tasklist->status = $request->status;    // 追加
             $tasklist->content = $request->content;
             $tasklist->update();
