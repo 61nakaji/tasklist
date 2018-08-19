@@ -79,7 +79,7 @@ public function index()
                 'tasklist' => $tasklist ,
                 ]);
         } else {
-        return redirect('/');
+            return redirect('/');
         }
 
     }
@@ -115,13 +115,15 @@ public function index()
             'status' => 'required|max:191',   // 追加
             'content' => 'required|max:191',
         ]);
-        
-        $tasklist = Tasks::find($id);
-        $tasklist->status = $request->status;    // 追加
-        $tasklist->content = $request->content;
-        $tasklist->update();
-        
-        return redirect('/');
+        if (\Auth::id() === $tasklist->user_id) {
+            $tasklist = Tasks::find($id);
+            $tasklist->status = $request->status;    // 追加
+            $tasklist->content = $request->content;
+            $tasklist->update();
+            return redirect('/');
+        }else{
+            return redirect('/');
+    }
     }
 
     /**
