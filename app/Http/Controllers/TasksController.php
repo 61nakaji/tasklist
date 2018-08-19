@@ -15,12 +15,18 @@ class TasksController extends Controller
      */
 public function index()
     {
-        $tasklist = Tasks::all();
+    $tasklist = Tasks::all();
+        
+    if (\Auth::check()) {
+        $user = \Auth::user();
+        $tasks = $user->tasks;//ログインしているユーザのタスク一覧
         
         return view('tasks.index',[
-            'tasklist' => $tasklist
-        ]);
-    }
+            'tasks' => $tasks
+    ]);}else {
+        return view('welcome');
+        
+    }}
 
     /**
      * Show the form for creating a new resource.
@@ -50,10 +56,10 @@ public function index()
             'content' => 'required|max:191',
         ]);
         
-        $tasklist = new tasks;
-        $tasklist->status = $request->status;    // 追加
-        $tasklist->content = $request->content;
-        $tasklist->save();
+        $request->user()->tasks()->create([
+            'content' => $request->content,
+            'status' => $request->status,
+        ]);
         
         return redirect('/');
     }
@@ -68,9 +74,14 @@ public function index()
     {
         $tasklist = Tasks::find($id);
         
-        return view('tasks.show', [
-            'tasklist' => $tasklist
-            ]);
+        if (\Auth::id() === $tasklist->user_id) {
+            return view('tasks.show', [
+                'tasks' => $tasklist
+                ]);
+        } else {
+        return redirect('/');
+        }
+
     }
 
     /**
@@ -83,10 +94,13 @@ public function index()
     {
         $tasklist = Tasks::find($id);
         
+        if (\Auth::id() === $tasklist->user_id) {
         return view('tasks.edit',[
             'tasklist' => $tasklist
-        ]);
-    }
+            ]);
+        }else{
+        return redirect('/');
+    }}
 
     /**
      * Update the specified resource in storage.
@@ -119,8 +133,11 @@ public function index()
     public function destroy($id)
     {
         $tasklist = Tasks::find($id);
+
+        if (\Auth::id() === $tasklist->user_id) {
         $tasklist->delete();
-        
         return redirect('/');
-    }
+        }else{
+        return redirect('/');
+    }}
 }
